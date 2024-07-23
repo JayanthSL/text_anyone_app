@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join Room</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .input-group {
+        margin-bottom: 10px;
+      }
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .input-group input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      .button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button:disabled {
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Join Room</h1>
+      <form id="join_form" action="/join_room" method="POST">
+        <input
+          type="hidden"
+          id="room_code"
+          name="room_code"
+          value="{{ room_code }}"
+        />
+        <div class="input-group">
+          <label for="user_id">User ID:</label>
+          <input
+            type="text"
+            id="user_id"
+            name="user_id"
+            placeholder="Enter your user ID"
+          />
+        </div>
+        <button class="button" type="submit">Join Room</button>
+      </form>
+    </div>
+  </body>
+</html>

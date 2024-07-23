@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Room</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .messages {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        height: 300px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+      }
+      .input-group {
+        margin-bottom: 10px;
+      }
+      .input-group input {
+        width: calc(100% - 100px);
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      .input-group button {
+        padding: 8px;
+        width: 80px;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Chat Room</h1>
+      <div class="messages" id="messages"></div>
+      <div class="input-group">
+        <input
+          type="text"
+          id="message_input"
+          placeholder="Type your message..."
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+      const socket = io();
+
+      const userId = "{{ user_id }}";
+      const roomCode = "{{ room_code }}";
+
+      socket.emit("join", { user_id: userId, room_code: roomCode });
+
+      socket.on("message", function (data) {
+        const messagesDiv = document.getElementById("messages");
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${data.user_id}: ${data.message}`;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+
+      function sendMessage() {
+        const messageInput = document.getElementById("message_input");
+        const message = messageInput.value;
+        if (message.trim() !== "") {
+          socket.emit("message", {
+            user_id: userId,
+            room_code: roomCode,
+            message: message,
+          });
+          messageInput.value = "";
+        }
+      }
+    </script>
+  </body>
+</html>

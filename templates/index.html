@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Room Management</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .input-group {
+        margin-bottom: 10px;
+      }
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .input-group input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      .button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button:disabled {
+        background-color: #ccc;
+      }
+      .message {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Room Management</h1>
+      <form id="room_form" action="" method="POST">
+        <div class="input-group">
+          <label for="user_id">User ID:</label>
+          <input
+            type="text"
+            id="user_id"
+            name="user_id"
+            placeholder="Enter your user ID"
+          />
+        </div>
+        <div class="input-group">
+          <label for="room_code">Room Code:</label>
+          <input
+            type="text"
+            id="room_code"
+            name="room_code"
+            placeholder="Enter room code"
+          />
+        </div>
+        <button
+          class="button"
+          type="button"
+          onclick="submitForm('create_room')"
+        >
+          Create Room
+        </button>
+        <button class="button" type="button" onclick="submitForm('join_room')">
+          Join Room
+        </button>
+      </form>
+      <div id="qr_code_container"></div>
+      <div class="message" id="message"></div>
+    </div>
+
+    <script>
+      function submitForm(action) {
+        const form = document.getElementById("room_form");
+        form.action = action;
+        form.method = "POST";
+        form.submit();
+      }
+
+      function generateQRCode() {
+        const roomCode = document.getElementById("room_code").value;
+        if (roomCode.trim() !== "") {
+          const qrCodeContainer = document.getElementById("qr_code_container");
+          qrCodeContainer.innerHTML = `<img src="/qr_code/${roomCode}" alt="QR Code" />`;
+        }
+      }
+
+      document
+        .getElementById("room_code")
+        .addEventListener("input", generateQRCode);
+    </script>
+  </body>
+</html>

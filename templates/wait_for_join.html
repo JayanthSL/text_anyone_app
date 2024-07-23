@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waiting for User to Join</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        text-align: center;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .qr-code {
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Waiting for User to Join</h1>
+      <div class="qr-code">
+        <img src="/qr_code/{{ room_code }}" alt="QR Code" />
+      </div>
+      <p>Scan the QR code to join the room.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+      const socket = io();
+
+      // Listen for room status updates
+      socket.on("room_status", function (data) {
+        if (data.room_code === "{{ room_code }}" && data.status) {
+          window.location.href = `/chat?user_id={{ user_id }}&room_code={{ room_code }}`;
+        }
+      });
+
+      // Check room status periodically
+      function checkRoomStatus() {
+        fetch(`/check_room_status/{{ room_code }}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.joined) {
+              window.location.href = `/chat?user_id={{ user_id }}&room_code={{ room_code }}`;
+            } else {
+              setTimeout(checkRoomStatus, 5000); // Check every 5 seconds
+            }
+          });
+      }
+
+      checkRoomStatus();
+    </script>
+  </body>
+</html>
